@@ -15,6 +15,8 @@ GDCdownload(
 )
 
 clinical<-GDCprepare(query)
+
+# Removing irrelevant rows from the clinical information object (rows containing column names and column dictionary indices)
 clinical<-lapply(clinical, FUN=function(x){
   return(x[-c(1,2),])
 })
