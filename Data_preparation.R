@@ -1,5 +1,5 @@
 setwd("data")
-library(TCGAbiolinks)
+require(TCGAbiolinks)
 
 # 1. TCGA clinical data
 target_cancer <- "TCGA-LUAD"
