@@ -41,6 +41,7 @@ followupdata_of_nte<-subset(clinical_followup,clinical_followup$new_tumor_event_
 followupdata_of_clinical_not_nte<-subset(clinical_followup,clinical_followup$new_tumor_event_dx_days_to=='[Not Applicable]')
 patientdata_of_nte<-subset(clinical_patient,clinical_patient$bcr_patient_barcode%in%unique(followupdata_of_nte$bcr_patient_barcode)==TRUE)
 patientdata_of_not_nte<-subset(clinical_patient,clinical_patient$bcr_patient_barcode%in%unique(followupdata_of_clinical_not_nte$bcr_patient_barcode)==TRUE)
+which(duplicated(followupdata_of_nte$bcr_patient_barcode))
 
 luad_nte_info_list<-list(clinical_ntedata=clinical_nte,
                             clinical_ntedata_of_followup=clinical_ntedata_of_followup,
