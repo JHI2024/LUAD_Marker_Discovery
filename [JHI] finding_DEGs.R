@@ -7,6 +7,7 @@ find_degs<-function(nte_patient_samples,not_nte_patient_samples){
   library(org.Hs.eg.db)
   nte_num<-ncol(nte_patient_samples)
   not_nte_num<-ncol(not_nte_patient_samples)
+  
   #Shapiro test(p>0.05) to select genes that follow normal-dist
   normaldist_genes_nte<-which(
     apply(nte_patient_samples,1,function(x){
@@ -48,7 +49,7 @@ find_degs<-function(nte_patient_samples,not_nte_patient_samples){
     }
   })))
   
-  fold2_stat_test_pval<-as.matrix(sort(stat_test_pval[which(stat_test_pval_fold[,2]>2|stat_test_pval_fold[,2]<0.5),1]))
+  fold2_stat_test_pval<-as.matrix(sort(stat_test_pval_fold[which(stat_test_pval_fold[,2]>2|stat_test_pval_fold[,2]<0.5),1]))
   
   #Fdr correction
   for (i in 1:length(fold2_stat_test_pval)){
@@ -58,8 +59,9 @@ find_degs<-function(nte_patient_samples,not_nte_patient_samples){
     }
   }
   DEGs_list<-keys(org.Hs.eg.db,keytype = 'ENSEMBL')[keys(org.Hs.eg.db,keytype = 'ENSEMBL')%in%rownames(fold2_stat_test_pval)[1:stop_point-1]==TRUE]
-  
-  return (DEGs_list)
+  deg_index<-which(keys(org.Hs.eg.db,keytype = 'ENSEMBL')%in%DEGs_list==TRUE)
+  DEGs_info<-data.frame(ENSEMBL=DEGs_list,Gene_code=keys(org.Hs.eg.db,keytype = 'SYMBOL')[deg_index])
+  return (DEGs_info)
 }
 #####################################################
 
@@ -72,4 +74,5 @@ con2_nte_patient_samples<-ln_gene_exp[,whole_tp_samples_list%in%con2_patientdata
 con2_not_nte_patient_samples<-ln_gene_exp[,whole_tp_samples_list%in%con2_patientdata_of_not_nte$bcr_patient_barcode==TRUE]
 
 a<-find_degs(con1_nte_patient_samples,con1_not_nte_patient_samples)
+
 b<-find_degs(con2_nte_patient_samples,con2_not_nte_patient_samples)
